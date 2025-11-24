@@ -131,7 +131,17 @@
       "points": 10
     },
     {
-      "name": "14. Test running the emulator on test&#47;samples&#47;test.obj",
+      "name": "14. Test control for NOT instruction",
+      "setup": "",
+      "run": "make test-control-not",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 5,
+      "points": 10
+    },
+    {
+      "name": "15. Test running the emulator on test&#47;samples&#47;test.obj",
       "setup": "make",
       "run": "./x16 test/samples/test.obj",
       "input": "",
@@ -141,7 +151,7 @@
       "points": 10
     },
     {
-      "name": "15. Test assembler with just one line of code",
+      "name": "16. Test assembler with just one line of code",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.simple\" test",
       "input": "",
@@ -151,7 +161,7 @@
       "points": 10
     },
     {
-      "name": "16. Test assembler with comments",
+      "name": "17. Test assembler with comments",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.comment\" test",
       "input": "",
@@ -161,7 +171,7 @@
       "points": 10
     },
     {
-      "name": "17. Test assembler with unused prior label",
+      "name": "18. Test assembler with unused prior label",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.prior\" test",
       "input": "",
@@ -171,7 +181,7 @@
       "points": 10
     },
     {
-      "name": "18. Test assembler with multiple instructions",
+      "name": "19. Test assembler with multiple instructions",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.multi\" test",
       "input": "",
@@ -181,7 +191,7 @@
       "points": 10
     },
     {
-      "name": "19. Test assembler with forward labels",
+      "name": "20. Test assembler with forward labels",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.forward\" test",
       "input": "",
@@ -191,7 +201,7 @@
       "points": 10
     },
     {
-      "name": "20. Test assembler with a loop program",
+      "name": "21. Test assembler with a loop program",
       "setup": "",
       "run": "make ARGS=\"Xas.loop\" test",
       "input": "",
@@ -201,7 +211,7 @@
       "points": 10
     },
     {
-      "name": "21. Test with all instructions",
+      "name": "22. Test with all instructions",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.all\" test",
       "input": "",
@@ -211,7 +221,7 @@
       "points": 10
     },
     {
-      "name": "22. Test assembler for an error with nonexistent label",
+      "name": "23. Test assembler for an error with nonexistent label",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.error.nolabel\" test",
       "input": "",
@@ -221,7 +231,7 @@
       "points": 10
     },
     {
-      "name": "23. Test assembler for an error with missing % before reg",
+      "name": "24. Test assembler for an error with missing % before reg",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.error.reg\" test",
       "input": "",
@@ -231,7 +241,7 @@
       "points": 10
     },
     {
-      "name": "24. Test assembler for an error with missing  $ before value",
+      "name": "25. Test assembler for an error with missing  $ before value",
       "setup": "make xas",
       "run": "make ARGS=\"Xas.error.imm\" test",
       "input": "",
@@ -241,7 +251,7 @@
       "points": 10
     },
     {
-      "name": "25. Test Style",
+      "name": "26. Test Style",
       "setup": "sudo pip3 install cpplint",
       "run": "cpplint *.c *.h",
       "input": "",
@@ -251,7 +261,7 @@
       "points": 10
     },
     {
-      "name": "26. Test X16 Memory",
+      "name": "27. Test X16 Memory",
       "setup": "sudo apt update;sudo apt install valgrind; make x16",
       "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./x16 test/samples/test.obj",
       "input": "",
@@ -261,7 +271,7 @@
       "points": 5
     },
     {
-      "name": "27. Test XAS Memory",
+      "name": "28. Test XAS Memory",
       "setup": "make x16; make xas; sudo apt update; sudo apt install valgrind",
       "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./xas test/samples/test.s",
       "input": "",
@@ -271,7 +281,7 @@
       "points": 8
     },
     {
-      "name": "28. Test Giza",
+      "name": "29. Test Giza",
       "setup": "make x16; make xas",
       "run": "make test-giza",
       "input": "",
