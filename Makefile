@@ -120,3 +120,6 @@ test-giza: $(TESTTARGET) x16 xas giza.x16s
 
 test-style:
 	cpplint *.c
+
+run-on-mac:
+	docker run -it --rm --mount type=bind,src=.,dst=/app seemongtan/build:latest
