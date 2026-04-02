@@ -32,6 +32,7 @@ x16: $(OBJ) $(MAIN)
 
 clean:
 	rm -rf *.o test/*.o $(TARGET) $(TESTTARGET) $(AS) test_x16.dSYM xod
+	-docker image rm seemongtan/build:latest
 
 run: x16
 	./$(TARGET)
