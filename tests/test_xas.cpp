@@ -6,10 +6,10 @@ using namespace std;
 TEST_CASE("Xas.simple", "[xas]") {
     cout << "Testing simple one line assembler...";
 
-    int rv = system("./xas test/samples/simple.x16s");
+    int rv = system("./xas tests/samples/simple.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/simple.obj");
+    rv = system("cmp a.obj tests/samples/simple.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -19,10 +19,10 @@ TEST_CASE("Xas.simple", "[xas]") {
 TEST_CASE("Xas.comment", "[xas]") {
     cout << "Testing comments in assembler...";
 
-    int rv = system("./xas test/samples/comment.x16s");
+    int rv = system("./xas tests/samples/comment.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/comment.obj");
+    rv = system("cmp a.obj tests/samples/comment.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -32,10 +32,10 @@ TEST_CASE("Xas.comment", "[xas]") {
 TEST_CASE("Xas.prior", "[xas]") {
     cout << "Testing unused label in assembler...";
 
-    int rv = system("./xas test/samples/prior.x16s");
+    int rv = system("./xas tests/samples/prior.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/prior.obj");
+    rv = system("cmp a.obj tests/samples/prior.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -45,10 +45,10 @@ TEST_CASE("Xas.prior", "[xas]") {
 TEST_CASE("Xas.multi", "[xas]") {
     cout << "Testing multiple instructions in assembler...";
 
-    int rv = system("./xas test/samples/multi.x16s");
+    int rv = system("./xas tests/samples/multi.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/multi.obj");
+    rv = system("cmp a.obj tests/samples/multi.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -58,10 +58,10 @@ TEST_CASE("Xas.multi", "[xas]") {
 TEST_CASE("Xas.forward", "[xas]") {
     cout << "Testing forward labels in assembler...";
 
-    int rv = system("./xas test/samples/forward.x16s");
+    int rv = system("./xas tests/samples/forward.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/forward.obj");
+    rv = system("cmp a.obj tests/samples/forward.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -71,10 +71,10 @@ TEST_CASE("Xas.forward", "[xas]") {
 TEST_CASE("Xas.loop", "[xas]") {
     cout << "Testing a full program with loops in assembler... ";
 
-    int rv = system("./xas test/samples/loop.x16s");
+    int rv = system("./xas tests/samples/loop.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/loop.obj");
+    rv = system("cmp a.obj tests/samples/loop.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
     cout << " assembler ok... ";
 
@@ -82,7 +82,7 @@ TEST_CASE("Xas.loop", "[xas]") {
     cout << "actually running the program...";
     rv = system("./x16 a.obj > out");
     REQUIRE(WEXITSTATUS(rv) == 0);
-    rv = system("cmp out test/samples/loop-out");
+    rv = system("cmp out tests/samples/loop-out");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -92,10 +92,10 @@ TEST_CASE("Xas.loop", "[xas]") {
 TEST_CASE("Xas.all", "[xas]") {
     cout << "Testing all instructions in assembler... ";
 
-    int rv = system("./xas test/samples/all.x16s");
+    int rv = system("./xas tests/samples/all.x16s");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
-    rv = system("cmp a.obj test/samples/all.obj");
+    rv = system("cmp a.obj tests/samples/all.obj");
     REQUIRE(WEXITSTATUS(rv) == 0);
 
     cout << "Passed" << endl;
@@ -105,7 +105,7 @@ TEST_CASE("Xas.all", "[xas]") {
 TEST_CASE("Xas.error.nolabel", "[xas]") {
     cout << "Testing error with no matching label in assembler... ";
 
-    int rv = system("./xas test/samples/error-nolabel.x16s");
+    int rv = system("./xas tests/samples/error-nolabel.x16s");
     REQUIRE(WEXITSTATUS(rv) == 2);
 
     cout << "Passed" << endl;
@@ -115,7 +115,7 @@ TEST_CASE("Xas.error.nolabel", "[xas]") {
 TEST_CASE("Xas.error.reg", "[xas]") {
     cout << "Testing error with no % before reg in assembler... ";
 
-    int rv = system("./xas test/samples/error-reg.x16s");
+    int rv = system("./xas tests/samples/error-reg.x16s");
     REQUIRE(WEXITSTATUS(rv) == 2);
 
     cout << "Passed" << endl;
@@ -125,7 +125,7 @@ TEST_CASE("Xas.error.reg", "[xas]") {
 TEST_CASE("Xas.error.imm", "[xas]") {
     cout << "Testing error with no $ before value in assembler... ";
 
-    int rv = system("./xas test/samples/error-val.x16s");
+    int rv = system("./xas tests/samples/error-val.x16s");
     REQUIRE(WEXITSTATUS(rv) == 2);
 
     cout << "Passed" << endl;

@@ -16,11 +16,11 @@ TEST_CASE("Memory.x16", "[memory]") {
     // ./wwcached"
     printf("Testing leaks for X16 emulator...\n");
 #ifdef __APPLE__
-    const char* cmd = 
-        "leaks --atExit -- ./x16 test/samples/test.obj";
+    const char* cmd =
+        "leaks --atExit -- ./x16 tests/samples/test.obj";
 #else
-    const char* cmd = 
-        "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./x16 test/samples/test.obj";
+    const char* cmd =
+        "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./x16 tests/samples/test.obj";
 #endif
     int status = system(cmd);
     REQUIRE(status == 0);
@@ -31,13 +31,13 @@ TEST_CASE("Memory.x16", "[memory]") {
 TEST_CASE("Memory.xas", "[memory]") {
     printf("Testing leaks for XAS assembler...\n");
 #ifdef __APPLE__
-    const char* cmd2 = 
-        "leaks --atExit -- ./xas test/samples/test.s";
+    const char* cmd2 =
+        "leaks --atExit -- ./xas tests/samples/test.s";
 #else
-    const char* cmd2 = 
-        "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./xas test/samples/test.s";
+    const char* cmd2 =
+        "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./xas tests/samples/test.s";
 #endif
     int status2 = system(cmd2);
     REQUIRE(status2 == 0);
-    printf("Success\n");    
+    printf("Success\n");
 }
