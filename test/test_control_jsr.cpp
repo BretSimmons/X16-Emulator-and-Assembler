@@ -40,7 +40,7 @@ TEST_CASE("Control.WB.jsr", "[control.jsr]") {
     int rv2 = execute_instruction(machine2);
     REQUIRE(rv2 == 0);
 
-    REQUIRE(x16_reg(machine, R_R7) == CODESTART + 1);
+    REQUIRE(x16_reg(machine2, R_R7) == CODESTART + 1);
 
     // This is a no op for a jsr
     REQUIRE(x16_reg(machine2, R_PC) == CODESTART + 1 - 33);

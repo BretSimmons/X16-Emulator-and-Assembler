@@ -4,7 +4,7 @@
 
 You can obtain a trace of execution by running 
 ```
-./x16 -l objectfile
+    ./x16 -l objectfile
 ```
 
 This generates a `log.txt` that contains the PC and instruction sequence that the emulator
@@ -20,4 +20,5 @@ To use valgrind, Mac users can run in a Linux environment by installing Docker, 
 
 This will give a Linux environment in which valgrind can run.
 
-When you are done with docker, you can run `make clean` to remove the docker image you downloaded.
+When you are done with docker, you can run `make clean` to remove the docker
+image you downloaded.

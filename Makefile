@@ -11,15 +11,15 @@ ODOBJ = xod.o bits.o instruction.o decode.o
 OD = xod
 TARGET = x16
 TESTTARGET = test_x16
-TESTOBJ = test/test_main.o test/test_bits.o test/test_instruction.o \
-	test/test_control_add.o test/test_control_and.o test/test_control_br.o \
-	test/test_control_not.o test/test_control_jmp.o \
-	test/test_control_jsr.o test/test_control_ld.o \
-	test/test_control_ldi.o test/test_control_ldr.o \
-	test/test_control_lea.o test/test_control_st.o \
-	test/test_control_sti.o test/test_control_str.o \
-	test/test_control_trap.o  \
-	test/test_xas.cpp test/test_giza.cpp
+TESTOBJ = tests/test_main.o tests/test_bits.o tests/test_instruction.o \
+	tests/test_control_add.o tests/test_control_and.o tests/test_control_br.o \
+	tests/test_control_not.o tests/test_control_jmp.o \
+	tests/test_control_jsr.o tests/test_control_ld.o \
+	tests/test_control_ldi.o tests/test_control_ldr.o \
+	tests/test_control_lea.o tests/test_control_st.o \
+	tests/test_control_sti.o tests/test_control_str.o \
+	tests/test_control_trap.o  \
+	tests/test_xas.cpp tests/test_giza.cpp
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -31,8 +31,7 @@ x16: $(OBJ) $(MAIN)
 	$(CC) -o $(TARGET) $^ $(CFLAGS)
 
 clean:
-	rm -rf *.o test/*.o $(TARGET) $(TESTTARGET) $(AS) test_x16.dSYM xod
-	-docker image rm seemongtan/build:latest
+	rm -rf *.o tests/*.o $(TARGET) $(TESTTARGET) $(AS) test_x16.dSYM xod
 
 run: x16
 	./$(TARGET)
