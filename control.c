@@ -58,7 +58,7 @@ int execute_instruction(x16_t* machine) {
                 drVal = sr1Val + sr2Val;
 
             } else {
-                // Sign extend imm5
+                // Extract and sign extend imm5
                 uint16_t imm5 = (instruction & (0b11111));
                 drVal = sr1Val + sign_extend(imm5, 5);
             }
@@ -69,12 +69,64 @@ int execute_instruction(x16_t* machine) {
             break;
 
         case OP_AND:
+            // Extract the SR1 and DR registers
+            SR1 = getbits(instruction, 6, 3);
+            DR = getbits(instruction, 9, 3);
+            // Get the value from SR1
+            sr1Val = x16_reg(machine, SR1);
+            drVal = 0;
+            if (((instruction >> 5) & 1) == 0){
+                // Extract the SR2 register
+                uint16_t SR2 = (instruction & 0b111);
+                // Get the value from SR2
+                uint16_t sr2Val = x16_reg(machine, SR2);
+                drVal = sr1Val & sr2Val;
+            } else{
+                // Extract and sign extend imm5
+                uint16_t imm5 = (instruction & (0b11111));
+                drVal = sr1Val & sign_extend(imm5, 5);
+            }
+            // Set the DR register
+            x16_set(machine, DR, drVal);
+            // Update the condition flags for the DR register
+            update_cond(machine, DR);
             break;
 
         case OP_NOT:
+            // Extract the SR and DR registers
+            uint16_t SR = getbits(instruction, 6, 3);
+            DR = getbits(instruction, 9, 3);
+            // Get the value from the SR
+            uint16_t srVal = x16_reg(machine, SR);
+            drVal = ~srVal;
+            // Set the DR register
+            x16_set(machine, DR, drVal);
+            // Update the condition flags for the DR register
+            update_cond(machine, DR);
             break;
 
         case OP_BR:
+            // Exract n, z, and p
+            uint16_t n = ((instruction >> 11) & 1);
+            uint16_t z = ((instruction >> 10) & 1);
+            uint16_t p = ((instruction >> 9) & 1);
+
+            // Get the condition flag
+            uint16_t flag = x16_cond(machine);
+            // Check if any of the bits match the condition flag
+            if ((n && (flag == FL_NEG)) 
+            || (z && (flag == FL_ZRO))
+            || (p && (flag == FL_POS)
+            // Also branch if no condition flags are set
+            || ((n + z + p) == 0))){
+                // Extract the offset and sign extend it
+                uint16_t PCoffset9 = (instruction & 0x1FF);
+                PCoffset9 = sign_extend(PCoffset9, 9);
+                // Get the PC counter
+                uint16_t curPC = x16_reg(machine, R_PC);
+                // Add the offset to the PC
+                x16_set(machine, R_PC, curPC + PCoffset9);
+            }
             break;
 
         case OP_JMP:
