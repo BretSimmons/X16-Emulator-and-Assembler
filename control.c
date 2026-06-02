@@ -43,6 +43,29 @@ int execute_instruction(x16_t* machine) {
     uint16_t opcode = getopcode(instruction);
     switch (opcode) {
         case OP_ADD:
+            // Extract the SR1 and DR registers
+            uint16_t SR1 = ((instruction >> 6) & 0b111);
+            uint16_t DR = ((instruction >> 9) & 0b111);
+            // Get the value from SR1
+            uint16_t sr1Val = x16_reg(machine, SR1);
+            uint16_t drVal = 0;
+            // Check if bit 5 is 0
+            if (((instruction >> 5) & 1) == 0){
+                // Extract the SR2 register
+                uint16_t SR2 = (instruction & (0b111));
+                // Get the value from SR2
+                uint16_t sr2Val = x16_reg(machine, SR2);
+                drVal = sr1Val + sr2Val;
+
+            } else {
+                // Sign extend imm5
+                uint16_t imm5 = (instruction & (0b11111));
+                drVal = sr1Val + sign_extend(imm5, 5);
+            }
+            // Set the DR register
+            x16_set(machine, DR, drVal);
+            // Update the condition flags for the DR register
+            update_cond(machine, DR);
             break;
 
         case OP_AND:
