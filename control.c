@@ -130,30 +130,159 @@ int execute_instruction(x16_t* machine) {
             break;
 
         case OP_JMP:
+            // Extract the BaseR register
+            uint16_t BaseR = ((instruction >> 6)& 0b111);
+            // JMP case
+            if (BaseR != 0b111){
+                // Get the value from BaseR
+                uint16_t baseRVal = x16_reg(machine, BaseR);
+                // Set the PC to the base register
+                x16_set(machine, R_PC, baseRVal);
+            // RET case
+            } else{
+                // Retrieve the return address from r7
+                uint16_t retADR = x16_reg(machine, R_R7);
+                // Set the PC to the return address
+                x16_set(machine, R_PC, retADR);
+            }
             break;
 
         case OP_JSR:
+            // Save the increment PC to r7
+            uint16_t curPC = x16_reg(machine, R_PC);
+            x16_set(machine, R_R7, curPC);
+            // JSR
+            if ((instruction >> 11) & 1){
+                // Extract PCoffset11
+                uint16_t PCoffset11 = (instruction & 0x7FF);
+                // Sign extend PCoffset11
+                PCoffset11 = sign_extend(PCoffset11, 11);
+                // Add value to the incremented PC
+                x16_set(machine, R_PC, curPC + PCoffset11);
+            // JSRR
+            } else {
+                // Extract the base register
+                uint16_t BaseR = ((instruction >> 6) & 0b111);
+                // Get the value from the base register
+                uint16_t baseRVal = x16_reg(machine, BaseR);
+                // Load into the PC
+                x16_set(machine, R_PC, baseRVal);
+            }
             break;
 
         case OP_LD:
+            // Extract PCoffset9 and sign extend it
+            uint16_t PCoffset9 = getbits(instruction, 0, 9);
+            PCoffset9 = sign_extend(PCoffset9, 9);
+            // Get the PC and add the offset
+            uint16_t PC = x16_reg(machine, R_PC);
+            PC += PCoffset9;
+            // Get the contents of memory at this address
+            uint16_t val = x16_memread(machine, PC);
+            // Extract DR register
+            DR = getbits(instruction, 9, 3);
+            // Load into DR
+            x16_set(machine, DR, val);
+            // Set the condition codes based on val
+            update_cond(machine, DR);
             break;
 
         case OP_LDI:
+            // Extract PCoffset9 and sign extend it
+            PCoffset9 = getbits(instruction, 0, 9);
+            PCoffset9 = sign_extend(PCoffset9, 9);
+            // Get the PC and add the offset
+            PC = x16_reg(machine, R_PC);
+            PC += PCoffset9;
+            // Get the memory stored at this point in memory
+            uint16_t mem = x16_memread(machine, PC);
+            // Get hte val stored indirectly in memory
+            val = x16_memread(machine, mem);
+            // Extract DR register
+            DR = getbits(instruction, 9, 3);
+            // Load into DR
+            x16_set(machine, DR, val);
+            // Set the condition codes based on val
+            update_cond(machine, DR);
             break;
 
         case OP_LDR:
+            // Extract offset6 and sign extend it
+            uint16_t offset6 = getbits(instruction, 0, 6);
+            offset6 = sign_extend(offset6, 6);
+            // Extract BaseR and the address stored there, then add offset
+            BaseR = getbits(instruction, 6, 3);
+            uint16_t BaseRMem = x16_reg(machine, BaseR);
+            BaseRMem += offset6;
+            // Get the value from the memory address
+            uint16_t BaseRVal = x16_memread(machine, BaseRMem);
+            // Extract DR
+            DR = getbits(instruction, 9, 3);
+            // Load the value into DR
+            x16_set(machine, DR, BaseRVal);
+            // Set the condition codes based on BaseRval
+            update_cond(machine, DR);
             break;
 
         case OP_LEA:
+            // Extract PCoffset9 and sign extend it
+            PCoffset9 = getbits(instruction, 0, 9);
+            PCoffset9 = sign_extend(PCoffset9, 9);
+            // Get the PC and add PCoffset9
+            PC = x16_reg(machine, R_PC);
+            PC += PCoffset9;
+            // Extract DR
+            DR = getbits(instruction, 9, 3);
+            // Load address into DR
+            x16_set(machine, DR, PC);
+            // Set the condition codes based on pcVal
+            update_cond(machine, DR);
             break;
 
         case OP_ST:
+            // Extract SR and its value
+            SR = getbits(instruction, 9, 3);
+            srVal = x16_reg(machine, SR);
+            // Extract PCoffset9 and sign extend it
+            PCoffset9 = getbits(instruction, 0, 9);
+            PCoffset9 = sign_extend(PCoffset9, 9);
+            // Get the PC and add PCoffset9
+            PC = x16_reg(machine, R_PC);
+            PC += PCoffset9;
+            // Write SR val to the memory location in PC
+            x16_memwrite(machine, PC, srVal);
             break;
 
         case OP_STI:
+            // Extract SR and its value
+            SR = getbits(instruction, 9, 3);
+            srVal = x16_reg(machine, SR);
+            // Extract PCoffset9 and sign extend it
+            PCoffset9 = getbits(instruction, 0, 9);
+            PCoffset9 = sign_extend(PCoffset9, 9);
+            // Get the PC and add PCoffset9
+            PC = x16_reg(machine, R_PC);
+            PC += PCoffset9;
+            // Get the address stoerd at the address contained in the PC
+            uint16_t memAdr = x16_memread(machine, PC);
+            // Write SR val to the memory location in PC
+            x16_memwrite(machine, memAdr, srVal);
             break;
 
         case OP_STR:
+            // Extract SR and its value
+            SR = getbits(instruction, 9, 3);
+            srVal = x16_reg(machine, SR);
+            // Extract BaseR and its value
+            BaseR = getbits(instruction, 6, 3);
+            BaseRVal = x16_reg(machine, BaseR);
+            // Extract offset6 and sign extend it
+            offset6 = getbits(instruction, 0, 6);
+            offset6 = sign_extend(offset6, 6);
+            // Add offset6 to BaseR
+            BaseRVal += offset6;
+            // Write SR val to the memory location in PC
+            x16_memwrite(machine, BaseRVal, srVal);
             break;
 
         case OP_TRAP:
