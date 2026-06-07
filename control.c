@@ -114,7 +114,7 @@ int execute_instruction(x16_t* machine) {
             // Get the condition flag
             uint16_t flag = x16_cond(machine);
             // Check if any of the bits match the condition flag
-            if ((n && (flag == FL_NEG)) 
+            if ((n && (flag == FL_NEG))
             || (z && (flag == FL_ZRO))
             || (p && (flag == FL_POS)
             // Also branch if no condition flags are set
