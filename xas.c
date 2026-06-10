@@ -37,28 +37,23 @@ reg_t getReg(char* reg){
     return (reg_t) regNum;
 }
 
-uint16_t getNum(char* imm){
+uint16_t getNum(char* imm, uint16_t bits){
     uint16_t num = 0;
     // Check that the number is actually a number
     if (imm[0] != '$'){
-        return -1;
+        return 0xFFFF;
     } else {
-        // Check if neg
-        bool neg = false;
-        if (imm[1] == '-'){
-            neg = true;
-        }
         // Convert the char to an int
-        uint16_t num = atoi(imm + 1);
+        int num = atoi(imm + 1);
         // Find min and max values
-        uint16_t minVal = -(1 << 6);
-        uint16_t maxVal = (1 << 6) - 1;
+        int minVal = -(1 << (bits - 1));
+        int maxVal = (1 << (bits - 1)) - 1;
         // Check if the number is too big
         if (num < minVal || num > maxVal){
             return 0xFFFF;
         }
         // Mask the upper bits
-        uint16_t mask = (1 << 6) -1;
+        uint16_t mask = (1 << bits) -1;
         return (num & mask);
     }
 }
@@ -91,7 +86,7 @@ int main(int argc, char** argv) {
     char line[100];
 
     // Open the output file in write
-    FILE* fpOut = fopen("xas.obj", "wb");
+    FILE* fpOut = fopen("a.obj", "wb");
 
     // Write the origin to the output file
     // Convert to big endian
@@ -168,13 +163,11 @@ int main(int argc, char** argv) {
         if (token[strlen(token) - 1] == ':'){
             // Labels don't need to be processed on the second pass,
             // so skip over them
-            token = strtok(line, remove);
-            // Anything after a label on a line, return error
-            if (token != NULL){
-                fprintf(stderr, "Error");
-                exit(2);
+            token = strtok(NULL, remove);
+            // IF label is alone, skip to the next line
+            if (token == NULL){
+                continue;
             }
-            continue;
         }
 
         // Increment the PC
@@ -199,7 +192,7 @@ int main(int argc, char** argv) {
             src2 = getReg(token);
             if (src2 == -1){
                 // If the value isn't a register, check if it is a number
-                imm = getNum(token);
+                imm = getNum(token, 5);
                 if (imm == 0xFFFF){
                     printError();
                 } else {
@@ -226,7 +219,7 @@ int main(int argc, char** argv) {
             src2 = getReg(token);
             if (src2 == -1){
                 // If the value isn't a register, check if it is a number
-                imm = getNum(token);
+                imm = getNum(token, 5);
                 if (imm == 0xFFFF){
                     printError();
                 } else {
@@ -379,7 +372,7 @@ int main(int argc, char** argv) {
             }
             // Get the offset value
             token = strtok(NULL, remove);
-            offset = getLabel(token, PC);
+            offset = getNum(token, 6);
             if (offset == 0xFFFF){
                 printError();
             }
@@ -460,7 +453,7 @@ int main(int argc, char** argv) {
             }
             // Get the offset value
             token = strtok(NULL, remove);
-            offset = getLabel(token, PC);
+            offset = getNum(token, 6);
             if (offset == 0xFFFF){
                 printError();
             }

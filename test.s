@@ -1,4 +1,3 @@
-.Origin:
     # this is a comment
 start:
     add %r1, %r0, $10
