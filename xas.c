@@ -63,7 +63,7 @@ uint16_t getLabel(char* labelName, uint16_t PC){
     for (int i = 0; i < labelCount; i++){
         // Return the address if the names match
         if (strcmp(labelArray[i].name, labelName) == 0){
-            return (labelArray[i].address - PC);
+            return (labelArray[i].address - PC - 1);
         }
     }
     return 0xFFFF;
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
         usage();
     }
     // Open the input file in read
-    FILE* fp = fopen(argv[1], "r");
+    FILE* fp = fopen(argv[1], "r"); 
 
     // Set variables for the line, and PC
     uint16_t PC = 0x3000;
@@ -125,7 +125,16 @@ int main(int argc, char** argv) {
             labelArray[labelCount].name = strdup(token);
             labelArray[labelCount].address = PC;
             labelCount++;
+
+            // Get the next token
+            token = strtok(NULL, remove);
+            // If there is nothing after the label, continue without
+            // incrementing the PC
+            if (token == NULL){
+                continue;
+            }
         }
+
         while (token != NULL){
             // Iterate through all tokens in the line
             token = strtok(NULL, remove);
@@ -164,14 +173,12 @@ int main(int argc, char** argv) {
             // Labels don't need to be processed on the second pass,
             // so skip over them
             token = strtok(NULL, remove);
-            // IF label is alone, skip to the next line
+            // If there is nothing after the label, continue without
+            // incrementing the PC
             if (token == NULL){
                 continue;
             }
         }
-
-        // Increment the PC
-        PC++;
 
         // Generate the 16 bit binary that corresponds to the line
         if (strcmp(token, "add") == 0){
@@ -245,7 +252,7 @@ int main(int argc, char** argv) {
             if (offset == 0xFFFF){
                 printError();
             }
-            result = emit_br(1, 0, 0, offset);
+            result = emit_br(1, 0, 0, (offset & 0x1FF));
 
         } else if (strcmp(token, "brp") == 0){
             // Get the offset value
@@ -263,7 +270,7 @@ int main(int argc, char** argv) {
             if (offset == 0xFFFF){
                 printError();
             }
-            result = emit_br(0, 1, 0, imm);
+            result = emit_br(0, 1, 0, offset);
 
         } else if (strcmp(token, "brzp") == 0){
             // Get the offset value
@@ -472,6 +479,18 @@ int main(int argc, char** argv) {
         } else if (strcmp(token, "halt") == 0){
             result = emit_trap(TRAP_HALT);
 
+        } else if (strcmp(token, "val") == 0){
+            // Get the numbers
+            token = strtok(NULL, remove);
+            // Check that the number is actually a number
+            if (token[0] != '$'){
+                printError();
+            } else {
+            // Convert the char to an int
+            int num = atoi(token + 1);
+            result = emit_value(num);
+        }
+
         // If the line doesn't have a label or start with an instruction
         // exit with error
         } else {
@@ -481,6 +500,9 @@ int main(int argc, char** argv) {
         // Convert result to big endian and write to the output file
         uint16_t bigResult = htons(result);
         fwrite(&bigResult, sizeof(uint16_t), 1, fpOut);
+
+        // PC is incremented once per line (1 instruction per line)
+        PC++;
     }
     // Second pass
     fclose(fp);
