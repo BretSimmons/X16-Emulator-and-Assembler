@@ -143,7 +143,7 @@
     {
       "name": "15. Test running the emulator on test&#47;samples&#47;test.obj",
       "setup": "make",
-      "run": "./x16 test/samples/test.obj",
+      "run": "./x16 tests/samples/test.obj",
       "input": "",
       "output": "**********HALT",
       "comparison": "included",
@@ -263,7 +263,7 @@
     {
       "name": "27. Test X16 Memory",
       "setup": "sudo apt update;sudo apt install valgrind; make x16",
-      "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./x16 test/samples/test.obj",
+      "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./x16 tests/samples/test.obj",
       "input": "",
       "output": "",
       "comparison": "included",
@@ -273,7 +273,7 @@
     {
       "name": "28. Test XAS Memory",
       "setup": "make x16; make xas; sudo apt update; sudo apt install valgrind",
-      "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./xas test/samples/test.s",
+      "run": "valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./xas tests/samples/test.s",
       "input": "",
       "output": "",
       "comparison": "included",
