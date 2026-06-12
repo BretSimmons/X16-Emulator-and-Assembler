@@ -23,6 +23,14 @@ typedef struct {
 label labelArray[100];
 int labelCount = 0;
 
+char* lowercase(char* token){
+    // Switch all the characters of the token to lowercase
+    for (int i = 0; token[i] != '\0'; i++){
+        token[i] = tolower((unsigned char) token[i]);
+    }
+    return token;
+}
+
 reg_t getReg(char* reg){
     // Check if reg is actually a register, and is the right length
     reg_t ret = 0;
@@ -113,9 +121,7 @@ int main(int argc, char** argv) {
         }
 
         // Switch all the characters of the token to lowercase
-        for (int i = 0; token[i] != '\0'; i++){
-            token[i] = tolower((unsigned char)  token[i]);
-        }
+        token = lowercase(token);
 
         // Check if the token is a label
         if (token[strlen(token) - 1] == ':'){
@@ -165,9 +171,8 @@ int main(int argc, char** argv) {
             continue;
         }
         // Switch all the characters of the token to lowercase
-        for (int i = 0; token[i] != '\0'; i++){
-            token[i] = tolower((unsigned char)  token[i]);
-        }
+        token = lowercase(token);
+
         // Check if the token is a label
         if (token[strlen(token) - 1] == ':'){
             // Labels don't need to be processed on the second pass,
@@ -238,7 +243,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "br") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -247,7 +252,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brn") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -256,7 +261,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brp") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -265,7 +270,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brz") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -274,7 +279,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brzp") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -283,13 +288,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brnp") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             result = emit_br(1, 0, 1, offset);
 
         } else if (strcmp(token, "brnz") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -298,7 +303,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "brnzp") == 0){
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -307,7 +312,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "jmp") == 0){
             // Get the base register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             base = getReg(token);
             if (dst == -1){
                 printError();
@@ -319,7 +324,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "jsr") == 0){
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -328,7 +333,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "jsrr") == 0){
             // Get the base
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             base = getReg(token);
             if (base == -1){
                 printError();
@@ -337,13 +342,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "ld") == 0){
             // Get the dst register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             dst = getReg(token);
             if (dst == -1){
                 printError();
             }
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -351,13 +356,13 @@ int main(int argc, char** argv) {
             result = emit_ld(dst, offset);
         } else if (strcmp(token, "ldi") == 0){
             // Get the dst register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             dst = getReg(token);
             if (dst == -1){
                 printError();
             }
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -366,19 +371,19 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "ldr") == 0){
             // Get the dst register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             dst = getReg(token);
             if (dst == -1){
                 printError();
             }
             // Get the base register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             base = getReg(token);
             if (base == -1){
                 printError();
             }
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getNum(token, 6);
             if (offset == 0xFFFF){
                 printError();
@@ -387,13 +392,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "lea") == 0){
             // Get the dst register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             dst = getReg(token);
             if (dst == -1){
                 printError();
             }
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -402,13 +407,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "not") == 0){
             // Get the dst register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             dst = getReg(token);
             if (dst == -1){
                 printError();
             }
             // Get the src1 register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             src1 = getReg(token);
             if (src1 == -1){
                 printError();
@@ -417,13 +422,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "st") == 0){
             // Get the src1 register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             src1 = getReg(token);
             if (src1 == -1){
                 printError();
             }
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -432,13 +437,13 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "sti") == 0){
             // Get the src1 register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             src1 = getReg(token);
             if (src1 == -1){
                 printError();
             }
             // Get the offset (label.address - PC)
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
@@ -447,19 +452,19 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "str") == 0){
             // Get the src1 register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             src1 = getReg(token);
             if (src1 == -1){
                 printError();
             }
             // Get the base register
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             base = getReg(token);
             if (base == -1){
                 printError();
             }
             // Get the offset value
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             offset = getNum(token, 6);
             if (offset == 0xFFFF){
                 printError();
@@ -481,7 +486,7 @@ int main(int argc, char** argv) {
 
         } else if (strcmp(token, "val") == 0){
             // Get the numbers
-            token = strtok(NULL, remove);
+            token = lowercase(strtok(NULL, remove));
             // Check that the number is actually a number
             if (token[0] != '$'){
                 printError();
