@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
         usage();
     }
     // Open the input file in read
-    FILE* fp = fopen(argv[1], "r"); 
+    FILE* fp = fopen(argv[1], "r");
 
     // Set variables for the line, and PC
     uint16_t PC = 0x3000;
