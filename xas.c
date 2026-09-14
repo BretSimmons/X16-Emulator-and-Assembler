@@ -290,6 +290,9 @@ int main(int argc, char** argv) {
             // Get the offset value
             token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
+            if (offset == 0xFFFF){
+                printError();
+            }
             result = emit_br(1, 0, 1, offset);
 
         } else if (strcmp(token, "brnz") == 0){
