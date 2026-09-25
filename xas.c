@@ -184,9 +184,12 @@ int main(int argc, char** argv) {
                 continue;
             }
         }
+        
+        // If token isn't a comment or label, it is an instruction or error
+        char* inst = token;
 
         // Generate the 16 bit binary that corresponds to the line
-        if (strcmp(token, "add") == 0){
+        if ((strcmp(inst, "add") == 0) || (strcmp(inst, "and") == 0)){
             // Get the dst register
             token = strtok(NULL, remove);
             dst = getReg(token);
@@ -208,39 +211,19 @@ int main(int argc, char** argv) {
                 if (imm == 0xFFFF){
                     printError();
                 } else {
-                    result = emit_add_imm(dst, src1, imm);
+                    if (strcmp(inst, "add") == 0){
+                        result = emit_add_imm(dst, src1, imm);
+                    } else if (strcmp(inst, "and") == 0){
+                        result = emit_and_imm(dst, src1, imm);
+                    }
                 }
             } else {
-                result = emit_add_reg(dst, src1, src2);
-            }
-        } else if (strcmp(token, "and") == 0){
-            // Get the dst register
-            token = strtok(NULL, remove);
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
-            }
-            // Get the src1 register
-            token = strtok(NULL, remove);
-            src1 = getReg(token);
-            if (src1 == -1){
-                printError();
-            }
-            // Get the src2 register/ imm5 value
-            token = strtok(NULL, remove);
-            src2 = getReg(token);
-            if (src2 == -1){
-                // If the value isn't a register, check if it is a number
-                imm = getNum(token, 5);
-                if (imm == 0xFFFF){
-                    printError();
-                } else {
-                    result = emit_and_imm(dst, src1, imm);
+                if (strcmp(inst, "add") == 0){
+                    result = emit_add_reg(dst, src1, src2);
+                } else if (strcmp(inst, "and") == 0){
+                    result = emit_and_reg(dst, src1, src2);
                 }
-            } else {
-                result = emit_and_reg(dst, src1, src2);
             }
-
         } else if (strcmp(token, "br") == 0){
             // Get the offset value
             token = lowercase(strtok(NULL, remove));
