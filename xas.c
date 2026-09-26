@@ -213,6 +213,7 @@ int main(int argc, char** argv) {
                 } else {
                     if (strcmp(inst, "add") == 0){
                         result = emit_add_imm(dst, src1, imm);
+
                     } else if (strcmp(inst, "and") == 0){
                         result = emit_and_imm(dst, src1, imm);
                     }
@@ -220,96 +221,63 @@ int main(int argc, char** argv) {
             } else {
                 if (strcmp(inst, "add") == 0){
                     result = emit_add_reg(dst, src1, src2);
+
                 } else if (strcmp(inst, "and") == 0){
                     result = emit_and_reg(dst, src1, src2);
                 }
             }
-        } else if (strcmp(token, "br") == 0){
+            
+        } else if (strncmp(inst, "br", 2) == 0){
             // Get the offset value
             token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
                 printError();
             }
-            result = emit_br(0, 0, 0, offset);
+            
+            if (strcmp(inst, "br") == 0){
+                result = emit_br(0, 0, 0, offset);
 
-        } else if (strcmp(token, "brn") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
+            } else if (strcmp(inst, "brn") == 0){
+                result = emit_br(1, 0, 0, (offset & 0x1FF));
+
+            } else if (strcmp(inst, "brp") == 0){
+                result = emit_br(0, 0, 1, offset);
+
+            } else if (strcmp(inst, "brz") == 0){
+                result = emit_br(0, 1, 0, offset);
+
+            } else if (strcmp(inst, "brzp") == 0){
+                result = emit_br(0, 1, 1, offset);
+
+            } else if (strcmp(inst, "brnp") == 0){
+                result = emit_br(1, 0, 1, offset);
+
+            } else if (strcmp(inst, "brnz") == 0){
+                result = emit_br(1, 1, 0, offset);
+
+            } else if (strcmp(inst, "brnzp") == 0){
+                result = emit_br(1, 1, 1, offset);
             }
-            result = emit_br(1, 0, 0, (offset & 0x1FF));
 
-        } else if (strcmp(token, "brp") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(0, 0, 1, offset);
-
-        } else if (strcmp(token, "brz") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(0, 1, 0, offset);
-
-        } else if (strcmp(token, "brzp") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(0, 1, 1, offset);
-
-        } else if (strcmp(token, "brnp") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(1, 0, 1, offset);
-
-        } else if (strcmp(token, "brnz") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(1, 1, 0, offset);
-
-        } else if (strcmp(token, "brnzp") == 0){
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_br(1, 1, 1, offset);
-
-        } else if (strcmp(token, "jmp") == 0){
+        } else if (strcmp(token, "ret") == 0){
+            result = emit_jmp((reg_t) 7);
+        
+        } else if ((strcmp(token, "jmp") == 0) || (strcmp(token, "jsrr") == 0)){
             // Get the base register
             token = lowercase(strtok(NULL, remove));
             base = getReg(token);
             if (dst == -1){
                 printError();
             }
-            result = emit_jmp(base);
-
-        } else if (strcmp(token, "ret") == 0){
-            result = emit_jmp((reg_t) 7);
+            if (strcmp(inst, "jmp") == 0){
+                result = emit_jmp(base);
+            } else if (strcmp(inst, "jsrr") == 0){
+                result = emit_jsrr(base);    
+            }
 
         } else if (strcmp(token, "jsr") == 0){
-            // Get the offset (label.address - PC)
+            // Get the offset
             token = lowercase(strtok(NULL, remove));
             offset = getLabel(token, PC);
             if (offset == 0xFFFF){
@@ -317,156 +285,114 @@ int main(int argc, char** argv) {
             }
             result = emit_jsr(offset);
 
-        } else if (strcmp(token, "jsrr") == 0){
-            // Get the base
+        } else if ((strcmp(token, "ld") == 0) || (strcmp(token, "ldi") == 0) ||
+        (strcmp(token, "lea") == 0) || (strcmp(token, "ldr") == 0) ||
+        (strcmp(token, "not") == 0)){
+            // Get the dst register
             token = lowercase(strtok(NULL, remove));
-            base = getReg(token);
-            if (base == -1){
+            dst = getReg(token);
+            if (dst == -1){
                 printError();
             }
-            result = emit_jsrr(base);
 
-        } else if (strcmp(token, "ld") == 0){
-            // Get the dst register
-            token = lowercase(strtok(NULL, remove));
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
-            }
-            // Get the offset (label.address - PC)
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_ld(dst, offset);
-        } else if (strcmp(token, "ldi") == 0){
-            // Get the dst register
-            token = lowercase(strtok(NULL, remove));
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
-            }
-            // Get the offset (label.address - PC)
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_ldi(dst, offset);
+            if (strcmp(inst, "not") == 0){
+                // Get the src1 register
+                token = lowercase(strtok(NULL, remove));
+                src1 = getReg(token);
+                if (src1 == -1){
+                    printError();
+                }
+                result = emit_not(dst, src1);
 
-        } else if (strcmp(token, "ldr") == 0){
-            // Get the dst register
-            token = lowercase(strtok(NULL, remove));
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
-            }
-            // Get the base register
-            token = lowercase(strtok(NULL, remove));
-            base = getReg(token);
-            if (base == -1){
-                printError();
-            }
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getNum(token, 6);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_ldr(dst, base, offset);
+            } else if (strcmp(inst, "ldr") == 0){
+                // Get the base register
+                token = lowercase(strtok(NULL, remove));
+                base = getReg(token);
+                if (base == -1){
+                    printError();
+                }
+                // Get the offset value
+                token = lowercase(strtok(NULL, remove));
+                offset = getNum(token, 6);
+                if (offset == 0xFFFF){
+                    printError();
+                }
+                result = emit_ldr(dst, base, offset);
 
-        } else if (strcmp(token, "lea") == 0){
-            // Get the dst register
-            token = lowercase(strtok(NULL, remove));
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
-            }
-            // Get the offset (label.address - PC)
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_lea(dst, offset);
+            } else {
+            // Handles ld, ldi, lea
+                // Get the offset
+                token = lowercase(strtok(NULL, remove));
+                offset = getLabel(token, PC);
+                if (offset == 0xFFFF){
+                    printError();
+                }
+                if (strcmp(inst, "ld") == 0){
+                    result = emit_ld(dst, offset);
 
-        } else if (strcmp(token, "not") == 0){
-            // Get the dst register
-            token = lowercase(strtok(NULL, remove));
-            dst = getReg(token);
-            if (dst == -1){
-                printError();
+                } else if (strcmp(inst, "ldi") == 0){
+                    result = emit_ldi(dst, offset);  
+
+                } else if (strcmp(inst, "lea") == 0){
+                    result = emit_lea(dst, offset);    
+                }
             }
+
+        } else if ((strcmp(token, "st") == 0) || (strcmp(token, "sti") == 0) ||
+        (strcmp(token, "str") == 0 )){
             // Get the src1 register
             token = lowercase(strtok(NULL, remove));
             src1 = getReg(token);
             if (src1 == -1){
                 printError();
             }
-            result = emit_not(dst, src1);
 
-        } else if (strcmp(token, "st") == 0){
-            // Get the src1 register
-            token = lowercase(strtok(NULL, remove));
-            src1 = getReg(token);
-            if (src1 == -1){
-                printError();
-            }
-            // Get the offset (label.address - PC)
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_st(src1, offset);
+            if (strcmp(inst, "str") == 0){
+                // Get the base register
+                token = lowercase(strtok(NULL, remove));
+                base = getReg(token);
+                if (base == -1){
+                    printError();
+                }
+                // Get the offset value
+                token = lowercase(strtok(NULL, remove));
+                offset = getNum(token, 6);
+                if (offset == 0xFFFF){
+                    printError();
+                }
+                result = emit_str(src1, base, offset);
 
-        } else if (strcmp(token, "sti") == 0){
-            // Get the src1 register
-            token = lowercase(strtok(NULL, remove));
-            src1 = getReg(token);
-            if (src1 == -1){
-                printError();
-            }
-            // Get the offset (label.address - PC)
-            token = lowercase(strtok(NULL, remove));
-            offset = getLabel(token, PC);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_sti(src1, offset);
+            } else {
+            // Handles st, sti
+                // Get the offset
+                token = lowercase(strtok(NULL, remove));
+                offset = getLabel(token, PC);
+                if (offset == 0xFFFF){
+                    printError();
+                }
+                if (strcmp(inst, "st") == 0 ){
+                    result = emit_st(src1, offset);
 
-        } else if (strcmp(token, "str") == 0){
-            // Get the src1 register
-            token = lowercase(strtok(NULL, remove));
-            src1 = getReg(token);
-            if (src1 == -1){
-                printError();
+                } else if (strcmp(inst, "sti") == 0){
+                    result = emit_sti(src1, offset);
+                }
             }
-            // Get the base register
-            token = lowercase(strtok(NULL, remove));
-            base = getReg(token);
-            if (base == -1){
-                printError();
-            }
-            // Get the offset value
-            token = lowercase(strtok(NULL, remove));
-            offset = getNum(token, 6);
-            if (offset == 0xFFFF){
-                printError();
-            }
-            result = emit_str(src1, base, offset);
 
         } else if (strcmp(token, "getc") == 0){
             result = emit_trap(TRAP_GETC);
+
         } else if (strcmp(token, "putc") == 0){
             result = emit_trap(TRAP_OUT);
+            
         } else if (strcmp(token, "puts") == 0){
             result = emit_trap(TRAP_PUTS);
+
         } else if (strcmp(token, "enter") == 0){
             result = emit_trap(TRAP_IN);
+
         } else if (strcmp(token, "putsp") == 0){
             result = emit_trap(TRAP_PUTSP);
+
         } else if (strcmp(token, "halt") == 0){
             result = emit_trap(TRAP_HALT);
 
