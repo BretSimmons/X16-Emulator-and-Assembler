@@ -38,6 +38,7 @@ Print:
     # Check if the user entered a zero
     ADD %r1, %r1, $0
     BRZ End
+   
 Loop:
     # Print out the correct number of asterisks
     PUTC
@@ -66,4 +67,3 @@ Newline:
 
 MultNum:
     val $9
-

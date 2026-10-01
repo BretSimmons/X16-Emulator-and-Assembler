@@ -1,0 +1,380 @@
+lea    %r0, $3
+puts
+getc
+brnzp  $57
+br     $87
+br     $101
+br     $108
+br     $99
+br     $111
+br     $109
+br     $101
+br     $32
+br     $116
+br     $111
+br     $32
+br     $76
+br     $67
+br     $51
+br     $32
+br     $82
+br     $111
+br     $103
+br     $117
+br     $101
+br     $46
+br     $10
+br     $85
+br     $115
+br     $101
+br     $32
+br     $87
+br     $83
+br     $65
+br     $68
+br     $32
+br     $116
+br     $111
+br     $32
+br     $109
+br     $111
+br     $118
+br     $101
+br     $46
+br     $10
+br     $80
+br     $114
+br     $101
+br     $115
+br     $115
+br     $32
+br     $97
+br     $110
+br     $121
+br     $32
+br     $107
+br     $101
+br     $121
+br     $46
+br     $46
+br     $10
+br     $0
+ld     %r6, $83
+jsr    $213
+ld     %r0, $87
+brp    $3
+jsr    $147
+jsr    $86
+halt
+and    %r0, %r0, $0
+st     %r0, $81
+lea    %r0, $6
+puts
+getc
+ld     %r1, $70
+add    %r1, %r0, %r1
+brnp   $-15
+halt
+br     $89
+br     $111
+br     $117
+br     $32
+br     $115
+br     $117
+br     $114
+br     $118
+br     $105
+br     $118
+br     $101
+br     $100
+br     $33
+br     $10
+br     $79
+br     $110
+br     $32
+br     $116
+br     $111
+br     $32
+br     $97
+br     $110
+br     $111
+br     $116
+br     $104
+br     $101
+br     $114
+br     $32
+br     $100
+br     $117
+br     $110
+br     $103
+br     $101
+br     $111
+br     $110
+br     $63
+br     $32
+br     $40
+br     $110
+br     $41
+br     $111
+br     $32
+br     $111
+br     $114
+br     $32
+br     $97
+br     $110
+br     $121
+br     $32
+br     $107
+br     $101
+br     $121
+br     $32
+br     $116
+br     $111
+br     $32
+br     $99
+br     $111
+br     $110
+br     $116
+br     $105
+br     $110
+br     $117
+br     $101
+br     $46
+br     $10
+br     $0
+-
+jsrr   %r0
+br     $65
+br     $32
+br     $16
+br     $0
+br     $0
+br     $0
+st     %r2, $-256
+ld     %r1, $-5
+ld     %r2, $-5
+getc
+ld     %r3, $51
+add    %r3, %r0, %r3
+brz    $10
+ld     %r3, $50
+add    %r3, %r0, %r3
+brz    $9
+ld     %r3, $46
+add    %r3, %r0, %r3
+brz    $8
+ld     %r3, $45
+add    %r3, %r0, %r3
+brz    $7
+brnzp  $-16
+add    %r2, %r2, $-1
+brnzp  $6
+add    %r2, %r2, $1
+brnzp  $4
+add    %r1, %r1, $-1
+brnzp  $2
+add    %r1, %r1, $1
+brnzp  $0
+and    %r1, %r1, $-1
+and    %r2, %r2, $15
+str    %r1, %r6, $-1
+str    %r2, %r6, $-2
+add    %r6, %r6, $-2
+jsr    $74
+ldr    %r3, %r3, $0
+brz    $4
+ld     %r4, $26
+add    %r3, %r3, %r4
+brz    $16
+jsr    $-126
+ld     %r1, $-41
+ld     %r2, $-41
+jsr    $65
+and    %r4, %r4, $0
+str    %r4, %r3, $0
+ldr    %r2, %r6, $0
+ldr    %r1, %r6, $1
+add    %r6, %r6, $2
+jsr    $59
+and    %r4, %r4, $0
+add    %r4, %r4, $2
+str    %r4, %r3, $0
+st     %r1, $-53
+st     %r2, $-53
+jsr    $-141
+and    %r4, %r4, $0
+add    %r4, %r4, $1
+st     %r4, $-56
+jsr    $-145
+-
+-
+-
+-
+-
+str    %r7, %r6, $-1
+add    %r6, %r6, $-1
+ld     %r3, $-69
+ld     %r4, $-69
+ld     %r5, $-66
+lea    %r0, $26
+puts
+ldr    %r1, %r5, $0
+lea    %r2, $17
+add    %r2, %r2, %r1
+ldr    %r0, %r2, $0
+putc
+add    %r5, %r5, $1
+add    %r3, %r3, $-1
+brp    $-8
+ld     %r0, $9
+putc
+ld     %r3, $-84
+add    %r4, %r4, $-1
+brp    $-13
+ld     %r0, $4
+putc
+ldr    %r7, %r6, $0
+add    %r6, %r6, $1
+jmp    %r7
+br     $10
+br     $32
+br     $35
+br     $64
+br     $75
+br     $68
+br     $0
+br     $27
+br     $91
+br     $50
+br     $74
+br     $27
+br     $91
+br     $72
+br     $27
+br     $91
+br     $51
+br     $74
+br     $0
+str    %r0, %r6, $-1
+str    %r4, %r6, $-2
+str    %r5, %r6, $-3
+str    %r7, %r6, $-4
+add    %r6, %r6, $-4
+ld     %r3, $-111
+add    %r3, %r3, %r1
+add    %r4, %r2, $0
+brz    $4
+ld     %r5, $-120
+add    %r3, %r3, %r5
+add    %r4, %r4, $-1
+brp    $-3
+ldr    %r7, %r6, $0
+ldr    %r5, %r6, $1
+ldr    %r4, %r6, $2
+ldr    %r0, %r6, $3
+add    %r6, %r6, $4
+jmp    %r7
+str    %r7, %r6, $-1
+add    %r6, %r6, $-1
+ld     %r1, $-132
+ld     %r2, $-132
+and    %r3, %r3, $0
+add    %r3, %r3, $1
+ld     %r5, $-131
+str    %r3, %r5, $0
+add    %r5, %r5, $1
+add    %r1, %r1, $-1
+brp    $-4
+ld     %r1, $-141
+add    %r2, %r2, $-1
+brp    $-7
+jsr    $38
+ld     %r1, $-144
+jsr    $66
+add    %r2, %r0, $0
+and    %r1, %r1, $0
+jsr    $-39
+and    %r4, %r4, $0
+add    %r4, %r4, $2
+str    %r4, %r3, $0
+st     %r1, $-151
+st     %r2, $-151
+ld     %r4, $-155
+add    %r4, %r4, $-1
+not    %r4, %r4
+add    %r4, %r4, $1
+add    %r1, %r1, $1
+jsr    $-50
+and    %r5, %r5, $0
+str    %r5, %r3, $0
+str    %r1, %r6, $-1
+add    %r6, %r6, $-1
+jsr    $17
+and    %r1, %r1, $0
+add    %r1, %r1, $3
+jsr    $44
+add    %r0, %r0, $-1
+add    %r2, %r2, %r0
+and    %r2, %r2, $15
+ldr    %r1, %r6, $0
+add    %r6, %r6, $1
+jsr    $-64
+str    %r5, %r3, $0
+add    %r5, %r1, %r4
+brn    $-19
+add    %r5, %r5, $4
+str    %r5, %r3, $0
+ldr    %r7, %r6, $0
+add    %r6, %r6, $1
+jmp    %r7
+str    %r1, %r6, $-1
+str    %r2, %r6, $-2
+str    %r3, %r6, $-3
+str    %r4, %r6, $-4
+str    %r5, %r6, $-5
+str    %r7, %r6, $-6
+add    %r6, %r6, $-6
+ld     %r1, $19
+ld     %r2, $17
+and    %r0, %r0, $0
+add    %r0, %r0, %r2
+add    %r1, %r1, $-1
+brp    $-3
+ld     %r1, $14
+add    %r0, %r0, %r1
+ld     %r1, $13
+and    %r0, %r0, %r1
+st     %r0, $8
+ldr    %r7, %r6, $0
+ldr    %r5, %r6, $1
+ldr    %r4, %r6, $2
+ldr    %r3, %r6, $3
+ldr    %r2, %r6, $4
+ldr    %r1, %r6, $5
+add    %r6, %r6, $6
+jmp    %r7
+ldi    %r6, $52
+st     %r5, $-115
+br     $131
+str    %r7, %r7, $-1
+str    %r2, %r6, $-1
+str    %r3, %r6, $-2
+str    %r4, %r6, $-3
+str    %r5, %r6, $-4
+str    %r7, %r6, $-5
+add    %r6, %r6, $-5
+not    %r1, %r1
+add    %r1, %r1, $1
+brz    $5
+add    %r2, %r0, %r1
+brn    $3
+add    %r0, %r0, %r1
+add    %r2, %r0, %r1
+brzp   $-3
+ldr    %r7, %r6, $0
+ldr    %r5, %r6, $1
+ldr    %r4, %r6, $2
+ldr    %r3, %r6, $3
+ldr    %r2, %r6, $4
+add    %r6, %r6, $5
+jmp    %r7
