@@ -1,4 +1,4 @@
-Custom 16 bit assembler and emulator, compiles files written in the x16 assembly language to binary objects, and runs them.
+Custom 16 bit assembler and emulator; compiles files written in the x16 assembly language to binary objects and runs them.
 
 # X16
 
