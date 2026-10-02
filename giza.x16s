@@ -1,1 +1,69 @@
-# Enter your code here for giza.x16s
+    # Set return val to 0
+    AND %r1, %r1, $0
+    
+Get:
+    # Get a digit of the number
+    GETC
+    PUTC
+
+    # Check if it is a newline
+    ADD %r0, %r0, $-10
+    BRZ Print
+
+    # Convert the ascii value to an int
+    # (num = ascii - 48)
+    ADD %r0, %r0, $-16
+    ADD %r0, %r0, $-16
+    ADD %r0, %r0, $-6
+
+    LD %r2, MultNum
+    ADD %r4, %r1, $0
+
+Mult:
+    # Multiply the current total by 10
+    ADD %r1, %r1, %r4
+    ADD %r2, %r2, $-1
+    BRP Mult
+    
+    # Add the new digit to the total
+    ADD %r1, %r1, %r0
+
+    BR Get
+
+Print:
+    # Print out the Bracket and load asterisk
+    LD %r0, Bracket1
+    PUTC
+    LD %r0, Asterisk
+    # Check if the user entered a zero
+    ADD %r1, %r1, $0
+    BRZ End
+   
+Loop:
+    # Print out the correct number of asterisks
+    PUTC
+    ADD %r1, %r1, $-1
+    BRP Loop
+
+End:
+    # Print closing bracket and halt
+    LD %r0, Bracket2
+    PUTC
+    LD %r0, Newline
+    PUTC
+    HALT
+
+Asterisk:
+    val $42
+
+Bracket1:
+    val $91
+
+Bracket2:
+    val $93
+
+Newline:
+    val $10
+
+MultNum:
+    val $9
